@@ -1,0 +1,29 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+Add Category
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card p-4" style="background-color: #343a40; color: #ffffff;">
+        <h2 class="mb-4">Add Category</h2>
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="name" class="form-label">Category Name:</label>
+            <input type="text" class="form-control" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea class="form-control" name="description" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Category</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

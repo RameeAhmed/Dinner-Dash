@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Signup
+{% endblock title %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card bg-light p-5">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      <strong>{{ message }}</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    <h3 class="text-dark mb-4">Signup</h3>
+
+    <form action="{% url 'signup' %}" method="post" class="needs-validation" novalidate>
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="full_name" class="form-label">Full Name:</label>
+        <input type="text" name="full_name" id="full_name" class="form-control" required />
+        <div class="invalid-feedback">Please provide your full name.</div>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" name="email" id="email" class="form-control" required />
+        <div class="invalid-feedback">Please provide a valid email.</div>
+      </div>
+      <div class="mb-3">
+        <label for="pass1" class="form-label">Password:</label>
+        <input type="password" name="pass1" id="pass1" class="form-control" required />
+        <div class="invalid-feedback">Please provide a password.</div>
+      </div>
+      <div class="mb-3">
+        <label for="pass2" class="form-label">Confirm Password:</label>
+        <input type="password" name="pass2" id="pass2" class="form-control" required />
+        <div class="invalid-feedback">Please confirm your password.</div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+    </form>
+  </div>
+</div>
+{% endblock content %}

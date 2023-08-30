@@ -1,0 +1,57 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+  <h2>Your Order List</h2>
+
+  <h3>Editable Orders</h3>
+  <ul>
+    {% for order in editable_orders %}
+      <li>
+        Order ID: <a href="{% url 'order_detail' order.id %}">{{ order.id }}</a><br>
+        Status: {{ order.get_status_display }}
+
+        {% if order.status == 'O' %}
+          <form class="d-inline" method="POST" action="{% url 'change_order_status' order.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="new_status" value="P">
+            <button type="submit" class="btn btn-primary btn-sm">Mark as Paid</button>
+          </form>
+        {% elif order.status == 'P' %}
+          <form class="d-inline" method="POST" action="{% url 'change_order_status' order.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="new_status" value="D">
+            <button type="submit" class="btn btn-success btn-sm">Mark as Completed</button>
+          </form>
+        {% endif %}
+        {% if order.status == 'O' or order.status == 'P' %}
+          <form class="d-inline" method="POST" action="{% url 'change_order_status' order.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="new_status" value="C">
+            <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+          </form>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h3>Completed Orders</h3>
+  <ul>
+    {% for order in completed_orders %}
+      <li>
+        Order ID: {{ order.id }}<br>
+        Status: {{ order.get_status_display }}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h3>Cancelled Orders</h3>
+  <ul>
+    {% for order in cancelled_orders %}
+      <li>
+        Order ID: {{ order.id }}<br>
+        Status: {{ order.get_status_display }}
+      </li>
+    {% endfor %}
+  </ul>
+
+{% endblock content %}

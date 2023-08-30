@@ -1,0 +1,41 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Update Item{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card p-4" style="background-color: #343a40; color: #ffffff;">
+        <h2 class="mb-4">Update Item: {{ item.title }}</h2>
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" class="form-control" name="title" value="{{ item.title }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea class="form-control" name="description" rows="4" required>{{ item.description }}</textarea>
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input type="number" class="form-control" name="price" step="0.01" value="{{ item.price }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="photo" class="form-label">Photo:</label>
+            <input type="file" class="form-control" name="photo">
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="is_visible" name="is_visible" {% if item.is_visible %}checked{% endif %}>
+            <label class="form-check-label" for="is_visible">Visible to Users</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Update Item</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

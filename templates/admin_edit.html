@@ -1,0 +1,66 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Menu{% endblock title %}
+
+{% block content %}
+
+<!-- ======= Menu Section ======= -->
+<section id="menu" class="menu section-bg">
+  <div class="container" data-aos="fade-up">
+    <div class="section-title">
+      <h2>Manage Menu Items</h2>
+      <p>Modify and Delete Menu Items</p>
+    </div>
+
+    <!-- Filter Options -->
+    <div class="row justify-content-end mb-3">
+      <div class="col-md-4">
+        <form class="d-flex" style="background-color: rgba(12, 11, 9, 0.6); padding: 10px; border-radius: 5px;">
+          <input class="form-control me-2" type="search" name="title" placeholder="Search by Title">
+          <select class="form-select" name="category">
+            <option value="" selected>Filter by Category</option>
+            {% for category in categories %}
+              <option value="{{ category.name }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+          <button class="btn btn-outline-secondary" type="submit">Apply</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Menu Items -->
+    <div class="row mt-4">
+      {% for category in categories %}
+        <div class="col-md-12">
+          <h2 class="text-center">{{ category.name }}</h2>
+        </div>
+        {% for item in category.item_set.all %}
+          {% if not request.GET.title or request.GET.title in item.title %}
+            {% if not request.GET.category or request.GET.category in item.categories.all %}
+              <div class="col-md-4 mb-4">
+                <div class="card">
+                  <img src="{{ item.photo.url }}" class="card-img-top" alt="{{ item.title }}" height="200" width="150">
+                  <div class="card-body" style="background-color: rgba(52, 58, 64, 0.8); color: #ffffff;">
+                    <h5 class="card-title">{{ item.title }}</h5>
+                    <p class="card-text">{{ item.description }}</p>
+                    <p class="card-text">Price: {{ item.price }}</p>
+                    <div class="d-flex justify-content-between">
+                      <form method="POST" action="{% url 'delete_item' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" style="background-color: transparent;">Delete</button>
+                      </form>
+                      <a href="{% url 'update_item' item.id %}" class="btn btn-primary" style="background-color: transparent;">Update</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- End Menu Section -->
+
+{% endblock content %}

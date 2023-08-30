@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Welcome, {{ request.user.username }}!</h1>
+
+  <h2>Your Order History</h2>
+  {% if orders %}
+    <ul class="order-list">
+      {% for order in orders %}
+        <li class="order">
+          <div class="order-header">
+            <h3 class="order-number">Order #{{ order.id }}</h3>
+            <p class="order-status">Status: {{ order.get_status_display }}</p>
+            <p class="order-created-at">Created at: {{ order.created_at }}</p>
+          </div>
+          <table class="item-list">
+            <tr>
+              <th class="column-spacing">Item #</th>
+              <th class="column-spacing">Item</th>
+              <th class="column-spacing">Quantity</th>
+              <th class="column-spacing">Subtotal ($)</th>
+              <th class="column-spacing">Tax ($)</th>
+              <th class="column-spacing">Total ($)</th>
+            </tr>
+            {% for order_item in order.orderitem_set.all %}
+              <tr class="item">
+                <td class="column-spacing">{{ forloop.counter }}</td>
+                <td class="column-spacing">{{ order_item.item.title }}</td>
+                <td class="column-spacing">{{ order_item.quantity }}</td>
+                <td class="column-spacing">${{ order_item.subtotal }}</td>
+                <td class="column-spacing">${{ order_item.tax }}</td>
+                <td class="column-spacing">${{ order_item.total_value }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </li>
+        <hr class="order-divider">
+      {% endfor %}
+    </ul>
+    {% if orders.has_other_pages %}
+      <div class="pagination">
+        <!-- Pagination links here -->
+      </div>
+    {% endif %}
+  {% else %}
+    <p class="no-orders">You have no order history.</p>
+  {% endif %}
+{% endblock %}

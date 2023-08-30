@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- ======= Menu Section ======= -->
+<section id="menu" class="menu section-bg">
+  <div class="container" data-aos="fade-up">
+    <!-- Your category buttons -->
+    <div class="categories">
+      {% for category in categories %}
+      <button
+        class="btn btn-primary category-button"
+        data-category="{{ category.name }}"
+      >
+        {{ category.name }}
+      </button>
+      {% endfor %}
+    </div>
+
+    <script>
+      const categoryButtons = document.querySelectorAll(".category-button");
+      categoryButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const category = button.getAttribute("data-category");
+          const url = `/category/${category}/`;
+          window.location.href = url;
+        });
+      });
+    </script>
+
+    <div class="row mt-4">
+      {% for category in categories %}
+      <div class="col-md-12">
+        <h2 class="text-center">{{ category.name }}</h2>
+      </div>
+      {% for item in items %}
+      {% if category in item.categories.all %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img
+            src="{{ item.photo.url }}"
+            class="card-img-top"
+            alt="{{ item.title }}"
+            height="200"
+            width="150"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ item.title }}</h5>
+            <p class="card-text">{{ item.description }}</p>
+            <p class="card-text">Price: {{ item.price }}</p>
+            {% if item.is_visible %}
+              <form method="POST" action="{% url 'add_to_cart' item.id %}">
+                {% csrf_token %}
+                <label for="quantity">Quantity:</label>
+                <input type="number" class="quantity-input" name="quantity" value="1" min="1">
+                <button type="submit" class="add-to-cart-button">Add to Cart</button>
+              </form>
+            {% else %}
+              <p class="not-visible-text">This item is not currently available.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% endfor %}
+
+
+    </div>
+  </div>
+</section><!-- End Menu Section -->
+
+
+
+
+{% endblock content %}

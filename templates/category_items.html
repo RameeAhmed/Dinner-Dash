@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Category Items{% endblock title %}
+
+{% block content %}
+<h2 class="text-center pt-4 pb-3">{{ category.name }} Items</h2>
+
+<div class="row pt-3">
+  {% for item in items_from_category %}
+    <div class="col-md-4 mb-4">
+      <div class="item-card">
+        <h3 class="item-title">{{ item.title }}</h3>
+        <img src="{{ item.photo.url }}" alt="{{ item.title }}" class="item-image rounded-circle" height='150' width='200'>
+        <div class="item-details">
+          <p class="item-description">{{ item.description }}</p>
+          <p class="item-price">Price: {{ item.price }}</p>
+          {% if item.is_visible %}
+          <form method="POST" action="{% url 'add_to_cart' item.id %}">
+            {% csrf_token %}
+            <label for="quantity">Quantity:</label>
+            <input type="number" class="quantity-input" name="quantity" value="1" min="1">
+            <button type="submit" class="add-to-cart-button">Add to Cart</button>
+          </form>
+        {% else %}
+          <p class="not-visible-text">This item is not currently available.</p>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock content %}
